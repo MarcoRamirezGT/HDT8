@@ -12,9 +12,162 @@ knitr::opts_chunk$set(echo = TRUE)
 # HDT 8: Redes Neuronales Artificiales (RNA)
 
 ```{r message=FALSE, warning=FALSE}
+#Librerias necesarias
+library(caret)
+library(nnet)
+library(neural)
+library(dummy)
+library(neuralnet)
+
+
+#Conjunto de datos a utilizar
+data<-read.csv('train.csv')
+
+
+
+#Quitar nulos
+data[is.na(data)] <- 0
+#Calculo de percentiles
+percentil <- quantile(data$SalePrice)
+#Percentiles
+estado<-c('Estado')
+data$Estado<-estado
+#Economica=0
+#Intermedia=1
+#Cara=2
+data <- within(data, Estado[SalePrice<=129975] <- 'Economica')
+data$Estado[(data$SalePrice>129975 & data$SalePrice<=163000)] <- 'Intermedia'
+data$Estado[data$SalePrice>163000] <- 'Cara'
+
+
+#Cambio de tipo de columnas
+
+data$SalePrice<-as.numeric(data$SalePrice)
+data$GrLivArea<-as.numeric(data$GrLivArea)
+data$GarageCars<-as.numeric(data$GarageCars)
+data$YearBuilt<-as.numeric(data$YearBuilt)
+data$GarageArea<-as.numeric(data$GarageArea)
+data$X1stFlrSF<-as.numeric(data$X1stFlrSF)
+
+data$Estado<-as.factor(data$Estado)
+
+porcentaje<-0.7
+set.seed(123)
+datos<-data.frame(data$SalePrice,data$GrLivArea,data$GarageCars,data$YearBuilt,data$GarageArea,data$X1stFlrSF,data$Estado)
+
+corte <- sample(nrow(datos),nrow(datos)*porcentaje)
+train<-datos[corte,]
+test<-datos[-corte,]
+
+#-------------------------------------------------
+# Red Neuronal con nnet
+#-------------------------------------------------
+
+modelo.nn2 <- nnet(data.Estado~.,data = datos,subset = corte, size=2, rang=0.1,
+                   decay=5e-4, maxit=200) 
+prediccion2 <- as.data.frame(predict(modelo.nn2, newdata = test[,1:6]))
+columnaMasAlta<-apply(prediccion2, 1, function(x) colnames(prediccion2)[which.max(x)])
+test$prediccion2<-columnaMasAlta #Se le añade al grupo de prueba el valor de la predicción
+
+modelo1<-confusionMatrix(as.factor(test$prediccion2),test$data.Estado)
+
+
+#-------------------------------------------------
+# Red Neuronal con caret
+#-------------------------------------------------
+
+modeloCaret <- train(data.Estado~., data=train, method="nnet", trace=F)
+test$prediccionCaret<-predict(modeloCaret, newdata = test[,1:6])
+modelo2<-confusionMatrix(test$prediccionCaret,test$data.Estado)
+
+
+```
+
+### Modelos de clasificación usando redes neuronales.
+#### Usando nnet
+
+```{r}
+modelo1
+```
+
+En el primer modelo se observa que la precisión y otras estadísticas tienen valores ni muy bajos ni tan altos. La precisión fue de 0.5125 y se debe a que las variables seleccionadas para realizar la clasificación no fueron las mejores. Además, este modelo en sí tiene el riesgo de equivocarse más, ya que en este caso se equivocó con 214 casas al momento de clasificarlas.
+
+#### Usando caret
+
+```{r}
+modelo2
+```
+
+Ahora con el segundo modelo percibimos mejores resultados, obteniendo una precisión de 0.7585 y por ende, las equivocaciones de este modelo fueron menos, siendo 106 casas mal clasificadas.
+
+Entonces, el segundo modelo fue mejor en cuanto a efectividad y menor número de equivocaciones. Y respecto al tiempo de procesamiento, ambos tomaron tiempos similares al ejecutarse.
+
+
+
+### SalePrice como variable de respuesta.
+
+```{r message=FALSE, warning=FALSE}
+#Librerias necesarias
+library(nnet)
+library(neuralnet)
+library(ggplot2)
+
+
+#Conjunto de datos a utilizar
+data<-read.csv('train.csv')
+
+
+#Cambio de tipo de columnas
+
+data$SalePrice<-as.numeric(data$SalePrice)
+data$GrLivArea<-as.numeric(data$GrLivArea)
+data$GarageCars<-as.numeric(data$GarageCars)
+data$YearBuilt<-as.numeric(data$YearBuilt)
+data$GarageArea<-as.numeric(data$GarageArea)
+data$X1stFlrSF<-as.numeric(data$X1stFlrSF)
+#Funcion para normalizar los datos
+normalize <- function(x) {
+  return ((x - min(x)) / (max(x) - min(x)))
+}
+
+
+
+porcentaje<-0.7
+set.seed(123)
+#Creamos el dataframe para predecir
+datos2<-data.frame(data$GrLivArea,data$GarageCars,data$YearBuilt,data$GarageArea,data$X1stFlrSF,data$SalePrice)
+#Creamos el dataframe con los datos normalizados
+datos <- as.data.frame(lapply(datos2, normalize))
+
+
+corte <- sample(nrow(datos),nrow(datos)*porcentaje)
+train<-datos[corte,]
+test<-datos[-corte,]
+
+#-------------------------------------------------
+# Red Neuronal con nnet
+#-------------------------------------------------
+#Prediccion
+modelo.nn2 <- nnet(as.numeric(data.SalePrice)~.,data = datos,subset = corte, size=2, rang=0.1,decay=5e-4, maxit=200) 
+prediccion1 <- predict(modelo.nn2, newdata = test,na.rm=TRUE)
+
+#Desnormalizar datos
+minvec <- sapply(datos2,min)
+maxvec <- sapply(datos2,max)
+denormalize <- function(x,minval,maxval) {
+  x*(maxval-minval) + minval
+}
+#Desnormalizamos el dataframe
+datos<-as.data.frame(Map(denormalize,datos,minvec,maxvec))
+#Desnormalizamos la prediccion
+prediccion1_r<-(prediccion1)*(max(datos2)-min(datos2))+min(datos2)
 
 ```
 
 ```{r}
+plot(datos$data.SalePrice)
+```
 
+```{r}
+plot(prediccion1_r)
 ```
