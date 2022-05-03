@@ -171,3 +171,40 @@ plot(datos$data.SalePrice)
 ```{r}
 plot(prediccion1_r)
 ```
+
+
+
+### Compare los dos modelos de regresión y determine cuál funcionó mejor para predecir el precio de las casas. 
+
+El modelo que nos funciono mejor fue el primer modelo, el modelo en el cual utilizamos nuestra variable categorica y no la variable SalePrice, por ende podemos concluir con que el mejor modelo para precedir el precio de las casas fue el metodo #1 con el modelo #2. 
+
+
+### Compare  la  eficiencia  del  mejor  modelo  de  RNA  con  los  resultados  obtenidos  con  los algoritmos  de  las  hojas de  trabajo  anteriores.  ¿Cuál  es  mejor  para  predecir?  ¿Cuál  se demoró más en procesar? 
+
+Nuestro modelo numero #2, fue nuestro mejor modelo, obtuvo un valor de 0.75%, realmente comparado con las hojas de trabajo anteriores no es el mejor modelo, porque es un valor bajo, pero realmente cumple con su funcion, hace de una manera correcta la prediccion, pero el cual puede mejorar posiblemente cambiando las variables categoricas o incluso agregando mas variables. Pero a nivel de demora, realmente todos se toman el mismo tiempo, tiempo que solo varia en cuestion de milisegundos o incluso en el mayor de los casos, un segundo. 
+
+
+### Compare los resultados del mejor modelo de esta hoja para clasificar con los resultados de los algoritmos usados para clasificar de las hojas de trabajo anteriores 
+
+
+En esta hoja, el mejor resultado que logramos fue con el modelo #2, el que realizamos con la libreria de Caret, obtuvimos un acierto del 0.75%, comparado con las hojas de trabajo anteriores, la verdad es que esta un poco bajo, mas sin embargo no esta fuera de la media que hemos tenido, podemos mencionar la hoja de trabajo con Arboles de decision, en la cual obtuvimos un valor de 0.70, lo cual es bastante semejante, pero comparado con las otra hojas sigue siendo bajo. 
+
+
+### Compare  los  resultados  del  mejor  modelo  para  predecir  el  precio  de  venta  con  los resultados  de  los  algoritmos  usados  para  el  mismo  propósito  de  las  hojas  de  trabajo anteriores. 
+
+
+Comparado con las hojas de trabajo anteriores, tuvimos un nivel estandar, hemos tenido resultados que estan en el rango, podriamos decir que solo se hace una variacion por decimales. 
+
+
+
+### Ahora que ha usado todos los modelos que hemos visto y aplicados al conjunto de datos llegue a conclusiones sobre cual es o cuales son los mejores modelos para clasificar dadas las  características  del  conjunto  de  datos.  ¿Cuál  o  cuáles  son  los mejores  para  predecir  el precio de las casas? 
+
+Realmente, luego de haber trabajado con todos los modelos, y tomando en cuanta los resultados anteriores, podemos concluir que el mejor modelo, o por lo menos el modelo que mejor nos resulto a nosotros, fue el modelo de Naive Bayes, en ese modelo llegamos a tener un nivel de acierto del 0.93%, lo cual podemos decir que es casi excelente, el otro modelo que nos ha resultado muy eficiente fue el de Random Forest, con el cual llegamos a tener un nivel de acierto de 0.82%. 
+
+Con base en lo anterior, podemos entoncer concluir con que los mejores modelos para precedir el precio de las casas con las condiciones dadas por el conjunto de datos, son: 
+
+1. NAIVE BAYES.
+
+2. RANDOM FOREST.
+
+
