@@ -1,0 +1,20 @@
+---
+title: "Informe HDT8"
+author: "Marco Ramirez 19588, Alfredo Quezada 191002, Estuardo Hernandez 19202"
+date: '2022-05-02'
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# HDT 8: Redes Neuronales Artificiales (RNA)
+
+```{r message=FALSE, warning=FALSE}
+
+```
+
+```{r}
+
+```

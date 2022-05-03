@@ -55,7 +55,7 @@ columnaMasAlta<-apply(prediccion2, 1, function(x) colnames(prediccion2)[which.ma
 test$prediccion2<-columnaMasAlta #Se le añade al grupo de prueba el valor de la predicción
 
 modelo1<-confusionMatrix(as.factor(test$prediccion2),test$data.Estado)
-
+modelo1
 
 #-------------------------------------------------
 # Red Neuronal con caret
@@ -64,7 +64,4 @@ modelo1<-confusionMatrix(as.factor(test$prediccion2),test$data.Estado)
 modeloCaret <- train(data.Estado~., data=train, method="nnet", trace=F)
 test$prediccionCaret<-predict(modeloCaret, newdata = test[,1:6])
 modelo2<-confusionMatrix(test$prediccionCaret,test$data.Estado)
-
-
-
-
+modelo2

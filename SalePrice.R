@@ -51,4 +51,3 @@ prediccion1_r<-(prediccion1)*(max(datos2)-min(datos2))+min(datos2)
 
 plot(datos$data.SalePrice)
 plot(prediccion1_r)
-
